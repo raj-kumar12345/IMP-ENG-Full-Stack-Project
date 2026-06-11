@@ -19,7 +19,6 @@ connectDB()
 app.use(cors({
     origin: "http://localhost:5173",
     origin: "https://imp-eng-full-stack-project.vercel.app",
-    origin: "https://imp-eng-full-stack-project-ka12vhmfw.vercel.app",
     credentials: true
 }))
 
