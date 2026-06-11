@@ -3,7 +3,7 @@ const { default: mongoose } = require("mongoose");
 const connectDB = async (req,res) =>{
     try {
         
-        const res = mongoose.connect("mongodb://localhost:27017/english")
+        const res = mongoose.connect(process.env.MONGO_URL)
         if(res){
             console.log('Successfully connected to DATABASE');
         }
