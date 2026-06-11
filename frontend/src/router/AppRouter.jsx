@@ -33,6 +33,7 @@ const AppRouter = () => {
                 const courseResponse = await axiosInstance.get("/course");
                 if (courseResponse.data?.courses) {
                     dispatch(setCourses(courseResponse.data.courses));
+                    console.log(courseResponse.data);
                 }
                 const userResponse = await axiosInstance.get("/auth/current-user");
                 if(userResponse.data?.user){

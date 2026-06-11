@@ -5,7 +5,7 @@ const { authMiddleware } = require("../middlewares/auth.middleware");
 const router = express.Router();
 
 
-router.post("/checkout",checkoutController);
+router.post("/checkout",authMiddleware, checkoutController);
 
 router.post("/verify",authMiddleware,paymentVerificationController);
 

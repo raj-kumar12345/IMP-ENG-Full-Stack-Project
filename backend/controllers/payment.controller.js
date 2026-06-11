@@ -47,10 +47,10 @@ const paymentVerificationController = async (req, res) => {
     if (expectedSignature === razorpay_signature) {
       console.log("Payment Verified ✅");
 
-      // 🔥 USER ID (auth middleware se aayega)
+      // USER ID (auth middleware se aayega)
       const userId = req.user._id;
 
-      // 🔥 COURSE ADD KAR DO (duplicate avoid)
+      //  COURSE ADD KAR DO (duplicate avoid)
       await userModel.findByIdAndUpdate(
         userId,
         {
