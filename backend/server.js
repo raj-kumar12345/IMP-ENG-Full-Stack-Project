@@ -15,10 +15,13 @@ const app = express();
 
 connectDB()
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://imp-eng-full-stack-project.vercel.app"
+];
 
 app.use(cors({
-    origin: "http://localhost:5173",
-    origin: "https://imp-eng-full-stack-project.vercel.app",
+    origin: allowedOrigins,
     credentials: true
 }))
 

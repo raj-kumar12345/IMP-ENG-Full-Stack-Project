@@ -33,7 +33,11 @@ const userRegisterController = async (req,res) =>{
         const token = jwt.sign({id: newUser._id}, process.env.JWT_TOKEN_KEY,{expiresIn: "30d"});
         newUser.activeToken = token;
         await newUser.save();
-        res.cookie("token",token);
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: true,        
+            sameSite: "none" 
+        });
 
         const responseUser = newUser.toObject();
         delete responseUser.password;
@@ -82,7 +86,11 @@ const userLoginController = async (req,res) =>{
         const token = jwt.sign({id: existUser._id,role: existUser.role}, process.env.JWT_TOKEN_KEY,{expiresIn: "30d"});
         existUser.activeToken = token;
         await existUser.save();
-        res.cookie("token",token);
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: true,        
+            sameSite: "none" 
+        });
 
         const responseUser = existUser.toObject();
         delete responseUser.password;

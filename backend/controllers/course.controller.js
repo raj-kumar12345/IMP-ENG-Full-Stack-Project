@@ -3,59 +3,62 @@ const sendToImgKit = require("../service/storage.sevice");
 
 
 
-const createCourseController = async (req,res ) =>{
-
-    try {
-        const { title, price, oldPrice, discount, duration, topics, isLive } = req.body;
-        if(!title || !price || !oldPrice || !discount || !duration || !topics || topics.length === 0){
-            return res.status(400).json({ message: "All required fields must be provided!" });
-        }
-        const topicsArray = typeof topics === "string" ? topics.split(",").map(t => t.trim()) : topics;
-        let imageUrl = "";
-
-        if(req.file){
-            try {
-                const uploadResponse = await sendToImgKit(
-                    req.file.buffer,
-                    `${title.replace(/\s+/g, '_')}_${Date.now()}`
-                );
-                imageUrl = uploadResponse.url; // Ab database mein ImageKit ka dynamic URL jayega
-            } catch (imgError) {
-                console.error("ImageKit Upload Error:", imgError);
-                return res.status(500).json({ message: "Image upload failed, course not created." });
+    const createCourseController = async (req,res ) =>{
+        console.log("CREATE COURSE HIT");
+        console.log("BODY:", req.body);
+        console.log("FILE:", req.file);
+        try {
+            const { title, price, oldPrice, discount, duration, topics, isLive } = req.body;
+            if(!title || !price || !oldPrice || !discount || !duration || !topics || topics.length === 0){
+                return res.status(400).json({ message: "All required fields must be provided!" });
             }
+            const topicsArray = typeof topics === "string" ? topics.split(",").map(t => t.trim()) : topics;
+            let imageUrl = "";
+
+            if(req.file){
+                try {
+                    const uploadResponse = await sendToImgKit(
+                        req.file.buffer,
+                        `${title.replace(/\s+/g, '_')}_${Date.now()}`
+                    );
+                    imageUrl = uploadResponse.url; // Ab database mein ImageKit ka dynamic URL jayega
+                } catch (imgError) {
+                    console.error("ImageKit Upload Error:", imgError);
+                    return res.status(500).json({ message: "Image upload failed, course not created." });
+                }
+            }
+
+            const newCourse = await CourseModel.create({
+                title: title.trim(),
+                price,oldPrice,
+                discount: discount.trim() ,
+                duration:duration.trim(),
+                topics: topicsArray,
+                img: imageUrl,
+                isLive: isLive || false
+            })
+            
+            return res.status(201).json({
+                success: true,
+                message: "new Course Created",
+                course: newCourse
+            })
+
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({
+                success: false,
+                message: "Internal Server Error"
+            })
         }
-
-        const newCourse = await CourseModel.create({
-            title: title.trim(),
-            price,oldPrice,
-            discount: discount.trim() ,
-            duration:duration.trim(),
-            topics: topicsArray,
-            img: imageUrl,
-            isLive: isLive || false
-        })
-        
-        return res.status(201).json({
-            success: true,
-            message: "new Course Created",
-            course: newCourse
-        })
-
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            success: false,
-            message: "Internal Server Error"
-        })
     }
-}
 
 
 const getAllCourseController = async (req,res) =>{
     try {
 
         const courses = await CourseModel.find({});
+        console.log("COURSES FOUND:", courses.length);
 
         return res.status(200).json({
             success: true,
@@ -64,6 +67,7 @@ const getAllCourseController = async (req,res) =>{
         
     } catch (error) {
         console.log(error);
+        console.log("COURSE ERROR:", error);
         return res.status(500).json({
             success: false,
             message: "Internal Server Error"

@@ -13,7 +13,9 @@ router.get("/",getAllCourseController)
 
 // for videos
 router.post("/add-videos/:courseId",authMiddleware,authorizeRoles,upload.single("video"),addVideosToCourseController)
-router.post("/create",upload.single("image"),authMiddleware,authorizeRoles,createCourseController)
+
+router.post("/create", upload.single("image"), authMiddleware, authorizeRoles("admin"),  createCourseController);
+
 
 module.exports = router;
 

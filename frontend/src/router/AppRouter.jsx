@@ -25,30 +25,38 @@ const AppRouter = () => {
 
     const dispatch = useDispatch()
 
-    useEffect(()=>{
-    
-        const fetchData = async () =>{
-            try {
-                
-                const courseResponse = await axiosInstance.get("/course");
-                if (courseResponse.data?.courses) {
-                    dispatch(setCourses(courseResponse.data.courses));
-                    console.log(courseResponse.data);
-                }
-                const userResponse = await axiosInstance.get("/auth/current-user");
-                if(userResponse.data?.user){
-                    dispatch(setUser(userResponse.data.user))
-                }
+    useEffect(() => {
+  const fetchCourses = async () => {
+    try {
+      const res = await axiosInstance.get("/course");
 
-                
-                
-            } catch (error) {
-              console.log(error.response.data.message);
-            }
-        }
-        fetchData()
-    
-    },[dispatch])
+      console.log("COURSE API:", res.data);
+
+      if (res.data?.courses) {
+        dispatch(setCourses(res.data.courses));
+      }
+    } catch (error) {
+      console.log("COURSE ERROR", error);
+    }
+  };
+
+  const fetchUser = async () => {
+    try {
+      const res = await axiosInstance.get("/auth/current-user");
+
+      if (res.data?.user) {
+        dispatch(setUser(res.data.user));
+      }
+    } catch (error) {
+      console.log("USER ERROR", error);
+        console.log(error?.response?.data?.message || error.message);
+
+    }
+  };
+
+  fetchCourses();
+  fetchUser();
+}, [dispatch]);
 
 
 
