@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const axiosInstance = axios.create({
-    baseURL: 'http://localhost:3000/api',
+    baseURL: 'https://imp-eng-full-stack-project-1.onrender.com',
     withCredentials: true,   
 })
 

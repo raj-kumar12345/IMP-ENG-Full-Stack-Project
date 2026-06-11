@@ -18,6 +18,7 @@ connectDB()
 
 app.use(cors({
     origin: "http://localhost:5173",
+    origin: "https://imp-eng-full-stack-project.vercel.app",
     credentials: true
 }))
 
@@ -28,6 +29,13 @@ app.use(express.json());
 app.use(cookieParser())
 app.use(express.urlencoded({extended: true}))
 
+
+app.use("/", (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: "API is running"
+    });
+});
 
 // user-route
 app.use("/api/auth",authRoutes);
