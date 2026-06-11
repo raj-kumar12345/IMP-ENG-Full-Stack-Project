@@ -6,6 +6,7 @@ const router = express.Router();
 
 
 router.get("/current-user",authMiddleware,userCurrentLoginController)
+
 router.post("/register", userRegisterController)
 router.post("/login",userLoginController);
 

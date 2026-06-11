@@ -30,7 +30,7 @@ app.use(cookieParser())
 app.use(express.urlencoded({extended: true}))
 
 
-app.use("/", (req, res) => {
+app.get("/", (req, res) => {
     res.status(200).json({
         success: true,
         message: "API is running"
